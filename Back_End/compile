@@ -1,0 +1,1 @@
+gcc -o  program "C_and_R.c" -lrt -lm -L/usr/local/lib -lwiringPi -lwebsockets
