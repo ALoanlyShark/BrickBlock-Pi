@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style type='text/css'>
-   html, body {height: 100%; margin: 0}
-   #right {width:25%; height:100%; float: right; background-color:gray}
-</style>
     <style type="text/css">
         #left {
             width: 50%;
@@ -20,10 +16,11 @@
 div.scroll
 {
   width:"100%";
-  height:350px;
+  height:100%;
   overflow:scroll;
 }
 </style>
+
 <style type="text/css">
       BODY,
       HTML {
@@ -72,38 +69,6 @@ div.scroll
         -webkit-border-radius: 8px;
         border-radius: 8px;
       }
-
-      /* Custom dialog styles */
-      #popup_container.style_1 {
-        font-family: Georgia, serif;
-        color: #A4C6E2;
-        background: #005294;
-        border-color: #113F66;
-      }
-
-      #popup_container.style_1 #popup_title {
-        color: #FFF;
-        font-weight: normal;
-        text-align: left;
-        background: #76A5CC;
-        border: solid 1px #005294;
-        padding-left: 1em;
-      }
-
-      #popup_container.style_1 #popup_content {
-        background: none;
-      }
-
-      #popup_container.style_1 #popup_message {
-        padding-left: 0em;
-      }
-
-      #popup_container.style_1 INPUT[type='button'] {
-        border: outset 2px #76A5CC;
-        color: #A4C6E2;
-        background: #3778AE;
-      }
-
     </style>
 
 <title>Web Based Visual Programming</title>
@@ -125,7 +90,7 @@ div.scroll
 <center>
   <span title="Click this button to display and send your code to the robot.">
     <p>
-      <input onclick="myFunction()" type="button" value="Run Code"/>
+      <input onclick="myFunction()" type="button" value="Run My Code"/>
     </p>
   </span>
 </center>
@@ -184,8 +149,8 @@ div.scroll
 	<block type="brickpi_go_right"></block>
 	<block type="brickpi_go_left"></block>
   <block type="brickpi_turn_around"></block>   
-    <block type="brickpi_for_loop"></block>
-    <block type="brickpi_pause"></block>
+  <block type="brickpi_for_loop"></block>
+  <block type="brickpi_pause"></block>
   </xml>
 
   <script type="text/javascript">
