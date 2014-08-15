@@ -100,7 +100,7 @@ Blockly.JavaScript['prop_digital_low'] = function(block) {
 };
 
 
-Blockly.Blocks['prop_pause'] = {
+Blockly.Blocks['brickpi_pause'] = {
   /**
    * Block for numeric value.
    * @this Blockly.Block
@@ -120,10 +120,10 @@ Blockly.Blocks['prop_pause'] = {
   }
 };
 
-Blockly.JavaScript['prop_pause'] = function(block) {
+Blockly.JavaScript['brickpi_pause'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
-  return 'pause('+code+');\n';
+  return 'usleep('+code+'000000);\n';
 };
 
 
@@ -147,7 +147,7 @@ Blockly.Blocks['brickpi_go_forward'] = {
 Blockly.JavaScript['brickpi_go_forward'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
-  return '8,';
+  return 'go_forward();\n';
 };
 
 Blockly.Blocks['brickpi_go_back'] = {
@@ -171,7 +171,7 @@ Blockly.Blocks['brickpi_go_back'] = {
 Blockly.JavaScript['brickpi_go_back'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
-  return '2,';
+  return 'go_back();\n';
 };
 
 Blockly.Blocks['brickpi_go_right'] = {
@@ -194,7 +194,7 @@ Blockly.Blocks['brickpi_go_right'] = {
 Blockly.JavaScript['brickpi_go_right'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
-  return '6,';
+  return 'go_right();\n';
 };
 
 Blockly.Blocks['brickpi_go_left'] = {
@@ -217,7 +217,7 @@ Blockly.Blocks['brickpi_go_left'] = {
 Blockly.JavaScript['brickpi_go_left'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
-  return '4,';
+  return 'go_left();\n';
 };
 
 Blockly.Blocks['brickpi_turn_around'] = {
@@ -241,5 +241,40 @@ Blockly.Blocks['brickpi_turn_around'] = {
 Blockly.JavaScript['brickpi_turn_around'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
-  return '0,';
+  return 'turn_around();\n';
+};
+
+Blockly.Blocks['brickpi_for_loop'] = {
+  init: function() {
+    this.setColour(120);
+    this.appendDummyInput()
+        .appendTitle('Repeat')
+        .appendTitle(new Blockly.FieldTextInput('10',
+            Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES')
+        .appendTitle('Times');
+    this.appendStatementInput('DO')
+        .appendTitle(Blockly.LANG_CONTROLS_REPEAT_INPUT_DO);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('For loop');
+  }
+};
+
+
+
+Blockly.JavaScript['brickpi_for_loop'] = function() {
+  // Repeat n times (internal number).
+  var repeats = Number(this.getTitleValue('TIMES'));
+  var branch = Blockly.JavaScript.statementToCode(this, 'DO');
+  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
+    branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
+        '\'' + this.id + '\'') + branch;
+  }
+  var loopVar = Blockly.JavaScript.variableDB_.getDistinctName(
+      'count', Blockly.Variables.NAME_TYPE);
+  var code = 'for (int ' + loopVar + ' = 0; ' +
+      loopVar + ' < ' + repeats + '; ' +
+      loopVar + '++) {\n' +
+      branch + '}\n';
+  return code;
 };
