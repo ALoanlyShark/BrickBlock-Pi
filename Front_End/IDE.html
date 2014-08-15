@@ -120,8 +120,13 @@ div.scroll
     Show Code
   </button>
 </span>
-</fieldset>
 
+<span title="Click this button to terminate the execution of your code.">
+  <button onclick="abort_code()" style="position:absolute; right:55px; top:295px;">
+    Abort Code
+  </button>
+</span>
+</fieldset>
 
   <script type="text/javascript" src="blockly_compressed.js"></script>
   <script type="text/javascript" src="blocks_compressed.js"></script>
@@ -160,6 +165,7 @@ div.scroll
   var websocket; 
   var code;
   var msg_to_send;
+  var abort_code;
   
   function myFunction(){
   alert(msg_to_send);
@@ -170,14 +176,21 @@ div.scroll
 function show_code() {
     alert(msg_to_send);
 }
-function Clear_workspace()
-{
-Blockly.mainWorkspace.clear();
+
+function Clear_workspace(){
+  Blockly.mainWorkspace.clear();
 }
-function connect_to_robot()
-{
-websocket = new WebSocket('ws://192.168.1.109:9000','dumb-increment-protocol');
-websocket.onopen = function () {
+
+function abort_code(){
+  abort_code='#include<stdio.h>\n#include"myBrickPiLibrary.h"\n main(){\ninit_brick_pi();\ncomplete_stop();\n}\n//end of main';
+  websocket.send(abort_code);
+  alert(abort_code);
+  console.log("abort_code="+abort_code);
+}
+
+function connect_to_robot(){
+  websocket = new WebSocket('ws://192.168.1.109:9000','dumb-increment-protocol');
+  websocket.onopen = function () {
 					document.getElementById('status_bar').innerHTML = '<h3><font color=#85BF25>Connected to Robot</font></h3>';		
                 };
  
@@ -194,7 +207,7 @@ websocket.onopen = function () {
 	
     msg_to_send = Blockly.JavaScript.workspaceToCode();
 	
-	msg_to_send='#include<stdio.h>\n#include"myBrickPiLibrary.h"\n main()\n{\ninit_brick_pi();\n'+ msg_to_send +'\n}//end of main';
+	msg_to_send='#include<stdio.h>\n#include"myBrickPiLibrary.h"\n main(){\ninit_brick_pi();\n'+ msg_to_send +'\n}\n//end of main';
    console.log(msg_to_send);
    //document.getElementById('the_code_view').innerHTML = "#include<stdio.h>\n#include<stdio.h>\nmyBrickPiLibrary.h main()\n{\n"+code+"\n}//end of main";
 	

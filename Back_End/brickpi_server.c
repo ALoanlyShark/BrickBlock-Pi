@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <libwebsockets.h>
@@ -85,6 +84,11 @@ static int callback_dumb_increment(struct libwebsocket_context * this,
 					printf("turn around %d \n",i);
 					turn_around();
 				}
+				else if(command_data[i]=='9'){
+					printf("stopping %d \n",i);
+					complete_stop();
+				}
+				
 			usleep(3000000);
 			
 			}//end of for loop

@@ -195,3 +195,43 @@ void turn_around(void){
 	printf("\nTurning around completed.\n");
 	printf("\n");
 }
+
+void complete_stop(void){
+	printf("\nStopping...\n");	
+	BrickPiUpdateValues();
+	usleep(1000);
+	printf("before loop loop A= %d  D=%d\n",BrickPi.Encoder[PORT_A],BrickPi.Encoder[PORT_D]);
+	
+	while(BrickPi.Encoder[PORT_A]!=0 || BrickPi.Encoder[PORT_D]!=0){
+		BrickPi.EncoderOffset[PORT_A] = BrickPi.Encoder[PORT_A];
+		BrickPi.EncoderOffset[PORT_D] = BrickPi.Encoder[PORT_D]; 
+		usleep(1000);
+		BrickPi.MotorSpeed[PORT_A]=0;
+		BrickPi.MotorSpeed[PORT_D]=0;
+		BrickPiUpdateValues();
+		printf("in loop A= %d  D=%d\n",BrickPi.Encoder[PORT_A],BrickPi.Encoder[PORT_D]);
+	}	
+	
+	printf("after offset= A= %d  D=%d\n",BrickPi.Encoder[PORT_A],BrickPi.Encoder[PORT_D]);
+	
+	int master_power=0;
+	int slave_power=0;
+	int error;
+	ClearTick();
+
+	while(BrickPi.Encoder[PORT_D]>-720){
+		error=(BrickPi.Encoder[PORT_A])-(-BrickPi.Encoder[PORT_D]);	
+		slave_power=slave_power-error/7;
+		BrickPi.MotorSpeed[PORT_A]=master_power;
+		BrickPi.MotorSpeed[PORT_D]=slave_power;
+		BrickPiUpdateValues();
+		usleep(100000);
+	}
+	
+	usleep(1000);
+	BrickPiUpdateValues();
+	printf("At the end value=%d\n",BrickPi.Encoder[PORT_D]);
+	printf("difference=A_D %d \n ",(BrickPi.Encoder[PORT_A])-(-BrickPi.Encoder[PORT_D]));
+	printf("\nStop completed.\n");
+	printf("\n");
+}
