@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style type='text/css'>
+   html, body {height: 100%; margin: 0}
+   #right {width:25%; height:100%; float: right; background-color:gray}
+</style>
+    <style type="text/css">
+        #left {
+            width: 50%;
+            float: left;
+        }
+        #right {
+            width: 50%;
+            float: left;
+        }
+    </style>
+
 <style>
 div.scroll
 {
@@ -9,15 +24,139 @@ div.scroll
   overflow:scroll;
 }
 </style>
+<style type="text/css">
+      BODY,
+      HTML {
+        padding: 0px;
+        margin: 0px;
+      }
+      BODY {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        background: #FFF;
+        padding: 15px;
+      }
+
+      H1 {
+        font-size: 20px;
+        font-weight: normal;
+      }
+
+      H2 {
+        font-size: 16px;
+        font-weight: normal;
+      }
+
+      FIELDSET {
+        border: solid 1px #CCC;
+        -moz-border-radius: 16px;
+        -webkit-border-radius: 16px;
+        border-radius: 16px;
+        padding: 1em 2em;
+        margin: 1em 0em;
+      }
+
+      LEGEND {
+        color: #666;
+        font-size: 16px;
+        padding: 0em .5em;
+      }
+
+      PRE {
+        font-family: "Courier New", monospace;
+        font-size: 11px;
+        color: #666;
+        background: #F8F8F8;
+        padding: 1em;
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        border-radius: 8px;
+      }
+
+      /* Custom dialog styles */
+      #popup_container.style_1 {
+        font-family: Georgia, serif;
+        color: #A4C6E2;
+        background: #005294;
+        border-color: #113F66;
+      }
+
+      #popup_container.style_1 #popup_title {
+        color: #FFF;
+        font-weight: normal;
+        text-align: left;
+        background: #76A5CC;
+        border: solid 1px #005294;
+        padding-left: 1em;
+      }
+
+      #popup_container.style_1 #popup_content {
+        background: none;
+      }
+
+      #popup_container.style_1 #popup_message {
+        padding-left: 0em;
+      }
+
+      #popup_container.style_1 INPUT[type='button'] {
+        border: outset 2px #76A5CC;
+        color: #A4C6E2;
+        background: #3778AE;
+      }
+
+    </style>
+
 <title>Web Based Visual Programming</title>
 </head>
 
 <body>
-<marquee behavior=alternate><h1><font color=#4E76C9>Web Based Visual Programming IDE</h1></marquee>
-<center><button type="button" onclick="myFunction()">Run My Code</button></center>
-<button type="button" onclick="connect_to_robot()" style="position:absolute;left:10px; top:100px;">Connect to Robot</button>
-<button type="button" onclick="Clear_workspace()" style="position:absolute;right:10px; top:100px;">Clear Workspace</button>
-<h3 id="status_bar">Connection Status...</h3>
+  <h1>
+  <center>
+    <font color=#4E76C9>
+      Web Based Visual Programming IDE
+    </font>
+  </center>
+  </h1>
+
+<fieldset>
+<legend>
+  Control Buttons
+</legend>
+<center>
+  <span title="Click this button to display and send your code to the robot.">
+    <p>
+      <input onclick="myFunction()" type="button" value="Run Code"/>
+    </p>
+  </span>
+</center>
+
+<span title="Click this button to set-up a wireless connection with the robot.">
+  <button type="button" onclick="connect_to_robot()" style="position:absolute;left:40px; top:100px;">
+    Connect to Robot
+  </button>
+</span>
+
+<span title="Click this button to clear your workspace of blocks.">
+  <button type="button" onclick="Clear_workspace()" style="position:absolute;right:40px; top:100px;">
+    Clear Workspace
+  </button>
+</span>
+
+<span title="This indicates the status of your connection with the robot.">
+  <h3 id="status_bar">Connection Status...</h3>
+</span>
+
+<center>
+  Drag and drop the blocks onto the field to program your robot. Then press the "Run my Code" button once you're done programming.
+</center>
+
+<span title="Click this button to display your code.">
+  <button onclick="show_code()" style="position:absolute; right:55px; top:270px;">
+    Show Code
+  </button>
+</span>
+</fieldset>
+
 
   <script type="text/javascript" src="blockly_compressed.js"></script>
   <script type="text/javascript" src="blocks_compressed.js"></script>
@@ -25,14 +164,19 @@ div.scroll
   
   <script type="text/javascript" src="my_blocks.js"></script>
   <script type="text/javascript" src="en.js"></script>
+	<div id="container">
 	
-	<div id="blocklyDiv" style="height: 100%; width: 100%;"></div> 
-  
+  <fieldset>
+  <legend>Blocks</legend>
+  <div id="blocklyDiv" style="height: 100% ; width: 99%;"></div>
+  </fieldset>
+
   <b>
     If you want more information about this new graphic coding language, check out
     <a href="https://code.google.com/p/blockly/" target="_blank">Blockly</a>,
     a developing project led by Google. 
   </b>
+ 
 
   <xml id="toolbox" style="display: none">
 	<block type="brickpi_go_forward"></block>
@@ -40,9 +184,9 @@ div.scroll
 	<block type="brickpi_go_right"></block>
 	<block type="brickpi_go_left"></block>
   <block type="brickpi_turn_around"></block>   
+    <block type="brickpi_for_loop"></block>
+    <block type="brickpi_pause"></block>
   </xml>
-
-  <script type="text/javascript" src="code.js"></script>
 
   <script type="text/javascript">
 
@@ -50,13 +194,16 @@ div.scroll
  
   var websocket; 
   var code;
-  
-  function myFunction() {
   var msg_to_send;
-  msg_to_send=code;
+  
+  function myFunction(){
+  alert(msg_to_send);
   websocket.send(msg_to_send);
 	console.log('msg_to_send='+msg_to_send);
-    
+    }
+
+function show_code() {
+    alert(msg_to_send);
 }
 function Clear_workspace()
 {
@@ -79,8 +226,13 @@ websocket.onopen = function () {
         {path: './', toolbox: document.getElementById('toolbox')});
 		
 	function myUpdateFunction() {
-    code = Blockly.JavaScript.workspaceToCode();
-   //document.getElementById('the_code_view').innerHTML = code;
+	
+    msg_to_send = Blockly.JavaScript.workspaceToCode();
+	
+	msg_to_send='#include<stdio.h>\n#include"myBrickPiLibrary.h"\n main()\n{\ninit_brick_pi();\n'+ msg_to_send +'\n}//end of main';
+   console.log(msg_to_send);
+   //document.getElementById('the_code_view').innerHTML = "#include<stdio.h>\n#include<stdio.h>\nmyBrickPiLibrary.h main()\n{\n"+code+"\n}//end of main";
+	
   }
   Blockly.addChangeListener(myUpdateFunction);
   
