@@ -182,7 +182,7 @@ function Clear_workspace(){
 }
 
 function abort_code(){
-  abort_code='#include<stdio.h>\n#include"myBrickPiLibrary.h"\n main(){\ninit_brick_pi();\ncomplete_stop();\n}\n//end of main';
+  abort_code='#include<stdio.h>\n#include<stdlib.h>\n#include"myBrickPiLibrary.h"\nmain(){\nexit(0);\n}\n//end of main';
   websocket.send(abort_code);
   alert(abort_code);
   console.log("abort_code="+abort_code);
